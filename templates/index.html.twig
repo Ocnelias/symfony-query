@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block title %}User queries{% endblock %}
+{% block head %}
+  {{ parent() }}
+{% endblock %}
+{% block body %}
+  <div class="col-10" style="width:100%; margin: auto;">
+    <h1 style="text-align: center;">User queries</h1>
+    <table class="table  table-hover" id="query">
+      <thead>
+      <tr>
+        <th scope="col">Query</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Date</th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for item in details %}
+        <tr>
+          <td><b>{{ item.query.name }}</b></td>
+          <td>{{ item.firstName }}</td>
+          <td>{{ item.lastName }}</td>
+          <td>{{ item.phone }}</td>
+          <td>{{ item.query.dateTime|date('Y-m-d H:i') }}</td>
+          <td><i class="fa fa-trash"></i></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block scripts_footer %}
+  {{ parent() }}
+  <script>
+  $(document).ready(function() {
+    $('#query').DataTable();
+  });
+  </script>
+{% endblock %}
+
