@@ -18,10 +18,10 @@ class Details
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Query::class, inversedBy="details")
+     * @ORM\ManyToOne(targetEntity=Query::class, inversedBy="details", cascade={"all"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $query;
+    protected $query;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -37,6 +37,7 @@ class Details
      * @ORM\Column(type="string", length=255)
      */
     private $phone;
+
 
     public function getId(): ?int
     {

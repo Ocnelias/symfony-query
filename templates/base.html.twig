@@ -20,6 +20,11 @@
   {% endblock %}
 </head>
 <body>
+{% for message in app.flashes('success') %}
+  <div class="alert alert-success">
+    {{ message }}
+  </div>
+{% endfor %}
 {% block body %}{% endblock %}
 {% block scripts_footer %}
   <script src="https://cdn.datatables.net/v/dt/jq-3.2.1/dt-1.10.16/datatables.min.js"></script>

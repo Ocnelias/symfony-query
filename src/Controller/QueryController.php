@@ -1,10 +1,19 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Details;
+use App\Entity\Query;
+use App\Form\QueryType;
+
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class QueryController extends AbstractController
 {
@@ -24,24 +33,52 @@ class QueryController extends AbstractController
     }
 
     /**
-     * @Route("/details/{id}", name="details_show")
+     * @Route("/create")
      */
-    public function show(int $id): Response
+    public function create(Request $request): Response
     {
-        $product = $this->getDoctrine()
-            ->getRepository(Product::class)
-            ->find($id);
+        $query = new Details();
+        $query->setFirstName('');
 
-        if (!$product) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
+        $form = $this->createFormBuilder($query)
+            ->add('firstName', TextType::class)
+            ->add('lastName', TextType::class)
+            ->add('phone', TextType::class)
+            ->add('query', QueryType::class)
+            ->add('save', SubmitType::class, ['label' => 'Save'])
+            ->getForm();
+
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($query);
+            $entityManager->flush();
+            $this->addFlash('success', 'Query Created!');
+            return $this->redirect('/');
         }
 
-        return new Response('Check out this great product: '.$product->getName());
+        return $this->render('create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
-        // or render a template
-        // in the template, print things with {{ product.name }}
-         return $this->render('index.html.twig', ['product' => $product]);
+    /**
+     * @Route("/delete")
+     */
+    public function delete(Request $request): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $query         = $entityManager->getRepository(Query::class)->find($request->request->get('id'));
+        if (!$query) {
+            throw $this->createNotFoundException(
+                'Not found'
+            );
+        }
+        $entityManager->remove($query);
+        $entityManager->flush();
+        $this->addFlash('success', 'Query deleted!');
+        return $this->redirect('/');
     }
 }

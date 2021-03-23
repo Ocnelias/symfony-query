@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block title %}User queries{% endblock %}
+{% block head %}
+  {{ parent() }}
+{% endblock %}
+{% block body %}
+  <a href="/"> <i class="fa fa-backward" title="return back"></i> </a>
+  <div class="col-10" style="width:100%; margin: auto;">
+    <h1 style="text-align: center;">Create new query</h1>
+    {{ form(form) }}
+  </div>
+{% endblock %}
+
+

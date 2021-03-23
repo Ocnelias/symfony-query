@@ -30,9 +30,9 @@ class Query
     private $dateTime;
 
     /**
-     * @ORM\OneToMany(targetEntity=Details::class, mappedBy="query")
+     * @ORM\OneToMany(targetEntity=Details::class, mappedBy="query", cascade={"all"}, orphanRemoval=true)
      */
-    private $details;
+    protected $details;
 
     public function __construct()
     {
